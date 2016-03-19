@@ -5,8 +5,7 @@ var Main = function(game){
 Main.prototype = {
 
 	create: function() {
-		this.game.world.setBounds(0,0,1920,600);
-
+		this.initializeVariables();
 		this.loadLevel();
 		this.loadEnemies();
 		this.loadPlayer();
@@ -28,7 +27,15 @@ Main.prototype = {
 		this.game.state.start('GameOver');
 	},
 
+	initializeVariables:function(){
+		this.neutralColor = "#7F7F7F";
+		this.evilColor = "#000000";
+		this.goodColor = "#FFFFFF";
+	},
+
 	loadLevel: function(){
+		this.game.world.setBounds(0,0,1920,600);
+		//load platforms and obstacles
 		this.platforms = game.add.physicsGroup();
 
 		this.platforms.create(0,500,'platform');
@@ -37,6 +44,9 @@ Main.prototype = {
 		this.platforms.create(300,300,'platform_small');
 
 		this.platforms.setAll('body.immovable',true);
+
+		//load good, evil and neutral zones
+		this.createZone(this.neutralColor,300,200,150,400);
 	},
 
 	loadEnemies: function(){
@@ -75,5 +85,15 @@ Main.prototype = {
 		if(this.jumpButton.isDown && (this.player.body.onFloor() || this.player.body.touching.down)){
 			this.player.body.velocity.y = -400
 		}
+	},
+
+	createZone: function(color,width,height,x,y){
+		var bmd = this.game.add.bitmapData(width, height);
+		bmd.ctx.beginPath();
+		bmd.ctx.rect(0, 0, width, 200);
+		bmd.ctx.fillStyle = color;
+		bmd.ctx.fill();
+		drawnObject = this.game.add.sprite(x, y, bmd);
+		drawnObject.anchor.setTo(0.5, 0.5);
 	}
 };
