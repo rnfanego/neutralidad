@@ -23,6 +23,12 @@ Main.prototype = {
 		this.checkInputs();
 	},
 
+	render: function(){
+		// Input debug info
+    	//game.debug.inputInfo(32, 32);
+    	//game.debug.pointer( game.input.activePointer );
+	},
+
 	gameOver: function(){
 		this.game.state.start('GameOver');
 	},
@@ -31,6 +37,7 @@ Main.prototype = {
 		this.neutralColor = "#7F7F7F";
 		this.evilColor = "#000000";
 		this.goodColor = "#FFFFFF";
+		this.zones = game.add.group();
 	},
 
 	loadLevel: function(){
@@ -47,6 +54,8 @@ Main.prototype = {
 
 		//load good, evil and neutral zones
 		this.createZone(this.neutralColor,300,200,150,400);
+		this.createZone(this.evilColor,800,300,400,150);
+		this.createZone(this.goodColor,500,200,550,400);
 	},
 
 	loadEnemies: function(){
@@ -90,10 +99,10 @@ Main.prototype = {
 	createZone: function(color,width,height,x,y){
 		var bmd = this.game.add.bitmapData(width, height);
 		bmd.ctx.beginPath();
-		bmd.ctx.rect(0, 0, width, 200);
+		bmd.ctx.rect(0, 0, width, height);
 		bmd.ctx.fillStyle = color;
 		bmd.ctx.fill();
-		drawnObject = this.game.add.sprite(x, y, bmd);
+		drawnObject = this.zones.create(x, y, bmd);
 		drawnObject.anchor.setTo(0.5, 0.5);
 	}
 };
