@@ -4,7 +4,9 @@ Preload.prototype = {
 
 	preload: function(){ 
 		this.game.stage.backgroundColor= '#3FB3DC';
-		this.game.load.image('player','assets/player.png');
+		this.game.load.image('player','assets/player_grey.png');
+		this.game.load.image('evil_part_player','assets/evil_part_player.png');
+		this.game.load.image('good_part_player','assets/good_part_player.png');
 		this.game.load.image('enemy','assets/enemy.png');
 		this.game.load.image('platform','assets/platform.png');
 		this.game.load.image('platform_medium','assets/platform_medium.png');

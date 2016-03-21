@@ -18,7 +18,9 @@ Main.prototype = {
 		this.game.physics.arcade.collide(this.enemy,this.platforms);
 		this.game.physics.arcade.overlap(this.player,this.enemy,this.spawnPlayer,null,this);
 
-		this.player.body.velocity.x = 0;
+		this.player.forEach(function(item){
+			item.body.velocity.x = 0;
+		});
 
 		this.checkInputs();
 	},
@@ -66,11 +68,21 @@ Main.prototype = {
 	},
 
 	loadPlayer: function(){
-		this.player = this.game.add.sprite(100,200,'player');
-		this.game.physics.arcade.enable(this.player);
-		this.player.body.collideWorldBounds = true;
-		this.player.body.gravity.y = 500;
-		this.game.camera.follow(this.player);
+		this.player = game.add.group();
+		this.player.enableBody = true;
+		this.player.physicsBodyType = Phaser.Physics.ARCADE;
+		//this.player = this.game.add.sprite(100,200,'player');
+		var container = this.player.create(100,200,'player');
+		var goodPart = this.player.create(135,205,'good_part_player');
+		var evilPart = this.player.create(120,205,'evil_part_player');
+		//this.game.physics.arcade.enable(this.player);
+		container.body.collideWorldBounds = true;
+		container.body.gravity.y = 500;
+		evilPart.body.collideWorldBounds = false;
+		evilPart.body.gravity.y = 500;
+		goodPart.body.collideWorldBounds = false;
+		goodPart.body.gravity.y = 500;
+		this.game.camera.follow(container);
 	},
 
 	loadInput: function(){
@@ -79,20 +91,28 @@ Main.prototype = {
 	},
 
 	spawnPlayer: function(){
-		this.player.scale.setTo(0, 0);
-		this.game.add.tween(this.player.scale).to({x:1, y:1}, 300).start();
-		this.player.reset(100,200);
+		this.player.forEach(function(item){
+			item.scale.setTo(0, 0);
+			this.game.add.tween(item.scale).to({x:1, y:1}, 300).start();
+			item.reset(100,300);
+		});
 	},
 
 	checkInputs: function(){
 		if(this.cursors.left.isDown){
-			this.player.body.velocity.x = -250;
+			this.player.forEach(function(item){
+				item.body.velocity.x = -250;
+			});
 		}else if(this.cursors.right.isDown){
-			this.player.body.velocity.x = 250;
+			this.player.forEach(function(item){
+				item.body.velocity.x = 250;
+			});
 		}
 
 		if(this.jumpButton.isDown && (this.player.body.onFloor() || this.player.body.touching.down)){
-			this.player.body.velocity.y = -400
+			this.player.forEach(function(item){
+				item.body.velocity.y = -400;
+			});
 		}
 	},
 
